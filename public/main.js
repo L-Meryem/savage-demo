@@ -1,71 +1,48 @@
-var thumbUp = document.getElementsByClassName("fa-thumbs-up");
-var thumbDown = document.getElementsByClassName("fa-thumbs-down");
+var thumb = document.getElementsByClassName("thumb");
 var trash = document.getElementsByClassName("fa-trash");
 
-Array.from(thumbUp).forEach(function(element) {
-      element.addEventListener('click', function(){
-        const name = this.parentNode.parentNode.childNodes[1].innerText
-        const msg = this.parentNode.parentNode.childNodes[3].innerText
-        console.log(this.parentNode.childNodes);
-        const thumbUp = parseFloat(this.parentNode.parentNode.childNodes[5].innerText)
-        fetch('messages/thumbUp', {
-          method: 'put',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            'name': name,
-            'msg': msg,
-            'thumb':thumbUp
-          })
-        })
-        .then(response => {
-          if (response.ok) return response.json()
-        })
-        .then(data => {
-          console.log(data)
-          window.location.reload(true)
-        })
-      });
+Array.from(thumb).forEach(function (element) {
+  element.addEventListener('click', function () {
+    const name = this.parentNode.parentNode.childNodes[1].innerText
+    const msg = this.parentNode.parentNode.childNodes[3].innerText
+
+    let whichThumb = this.classList.contains("fa-thumbs-up")? 'thumbUp' : 'thumbDown';
+
+    fetch('messages', {
+      method: 'put',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        'name': name,
+        'msg': msg,
+        'thumb': whichThumb
+      })
+    })
+      .then(response => {
+        if (response.ok) return response.json()
+      })
+      .then(data => {
+        console.log(data)
+        window.location.reload(true)
+      })
+  });
 });
 
-Array.from(thumbDown).forEach(function(element) {
-      element.addEventListener('click', function(){
-        const name = this.parentNode.parentNode.childNodes[1].innerText
-        const msg = this.parentNode.parentNode.childNodes[3].innerText
-        const thumbDown = parseFloat(this.parentNode.parentNode.childNodes[9].innerText)
-        fetch('messages/thumbDown', {
-          method: 'put',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({
-            'name': name,
-            'msg': msg,
-            'thumb':thumbDown
-          })
-        })
-        .then(response => {
-          if (response.ok) return response.json()
-        })
-        .then(data => {
-          console.log(data)
-          window.location.reload(true)
-        })
-      });
-});
 
-Array.from(trash).forEach(function(element) {
-      element.addEventListener('click', function(){
-        const name = this.parentNode.parentNode.childNodes[1].innerText
-        const msg = this.parentNode.parentNode.childNodes[3].innerText
-        fetch('messages', {
-          method: 'delete',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            'name': name,
-            'msg': msg
-          })
-        }).then(function (response) {
-          window.location.reload()
-        })
-      });
+Array.from(trash).forEach(function (element) {
+  element.addEventListener('click', function () {
+    const name = this.parentNode.parentNode.childNodes[1].innerText
+    const msg = this.parentNode.parentNode.childNodes[3].innerText
+    fetch('messages', {
+      method: 'delete',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        'name': name,
+        'msg': msg
+      })
+    }).then(function (response) {
+      window.location.reload()
+    })
+  });
 });

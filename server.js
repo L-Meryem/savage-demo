@@ -38,12 +38,10 @@ app.post('/messages', (req, res) => {
   })
 })
 
-app.put('/messages/:thumb', (req, res) => {
+app.put('/messages', (req, res) => {
   db.collection('messages')
-    .findOneAndUpdate({ name: req.body.name, msg: req.body.msg }, {
-      $set: {
-        [req.params.thumb] : req.body.thumb + 1
-      }
+    .findOneAndUpdate({ name: req.body.name, msg: req.body.msg   }, {
+       $inc: { [req.body.thumb]: 1 } 
     }, {
       sort: { _id: -1 },
       upsert: true
